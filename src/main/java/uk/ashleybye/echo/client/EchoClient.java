@@ -7,25 +7,25 @@ import java.io.PrintWriter;
 
 public class EchoClient {
 
-  private final EchoClientSocket clientSocket;
+  private final EchoServerConnection serverConnection;
   private final BufferedReader input;
   private final PrintWriter output;
 
-  EchoClient() {
-    this(new EchoClientSocket(), new BufferedReader(new InputStreamReader(System.in)), new PrintWriter(System.out));
+  public EchoClient() {
+    this(new EchoServerConnection(), new BufferedReader(new InputStreamReader(System.in)), new PrintWriter(System.out));
   }
 
-  EchoClient(EchoClientSocket clientSocket, BufferedReader input, PrintWriter output) {
-    this.clientSocket = clientSocket;
+  EchoClient(EchoServerConnection serverConnection, BufferedReader input, PrintWriter output) {
+    this.serverConnection = serverConnection;
     this.input = input;
     this.output = output;
   }
 
   public void start(String hostname, int port) {
     try {
-      connect(hostname, port);
+      serverConnection.open(hostname, port);
       sendAndReceiveUserInputLinesIndefinitely();
-      disconnect();
+      serverConnection.close();
     } catch (IOException ex) {
       exitWithMessage("An error occurred reading user input");
     } catch (InvalidConnectionParametersException ex) {
@@ -33,10 +33,6 @@ public class EchoClient {
     } catch (ServerConnectionException ex) {
       exitWithMessage("An error occurred communicating with the server");
     }
-  }
-
-  private void connect(String hostname, int port) {
-    clientSocket.connect(hostname, port);
   }
 
   private void sendAndReceiveUserInputLinesIndefinitely() throws IOException {
@@ -47,20 +43,8 @@ public class EchoClient {
   }
 
   private void sendAndReceiveUserInputLine(String userInput) {
-    sendMessage(userInput);
-    output.println(getResponse());
-  }
-
-  private void sendMessage(String message) {
-    clientSocket.sendMessage(message);
-  }
-
-  private String getResponse() {
-    return clientSocket.getResponse();
-  }
-
-  private void disconnect() {
-    clientSocket.disconnect();
+    serverConnection.sendMessage(userInput);
+    output.println(serverConnection.getResponse());
   }
 
   private void exitWithMessage(String message) {

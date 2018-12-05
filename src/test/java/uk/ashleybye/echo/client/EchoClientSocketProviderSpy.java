@@ -1,9 +1,6 @@
 package uk.ashleybye.echo.client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringReader;
 import java.io.StringWriter;
 
 public class EchoClientSocketProviderSpy extends EchoClientSocketProvider {
@@ -20,13 +17,13 @@ public class EchoClientSocketProviderSpy extends EchoClientSocketProvider {
   }
 
   @Override
-  public PrintWriter getSocketWriter() {
-    return new PrintWriter(socketWriter);
+  public void write(String message) {
+    socketWriter.write(message);
   }
 
   @Override
-  public BufferedReader getSocketReader() {
-    return new BufferedReader(new StringReader("received message"));
+  public String read() {
+    return "received message";
   }
 
   @Override
@@ -35,15 +32,15 @@ public class EchoClientSocketProviderSpy extends EchoClientSocketProvider {
     socketClosed = true;
   }
 
-  public String getSentMessage() {
+  String getSentMessage() {
     return socketWriter.toString();
   }
 
-  public boolean socketWasOpenedFor(String hostname, int port) {
+  boolean socketWasOpenedFor(String hostname, int port) {
     return this.hostname == hostname && this.port == port;
   }
 
-  public boolean socketWasClosed() {
+  boolean socketWasClosed() {
     return socketClosed;
   }
 }

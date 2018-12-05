@@ -17,9 +17,9 @@ class EchoClientTest {
   private static final int VALID_PORT = 1234;
 
   @Test
-  void testConnectsSendsAndReceivesMultipleMessagesThenDisconnects() {
+  void testOpenConnectionSendsAndReceivesMultipleMessagesCloseConnection() {
     StringWriter output = new StringWriter();
-    RespondsWithSentMessageEchoClientSocketStub clientSocket = new RespondsWithSentMessageEchoClientSocketStub();
+    RespondsWithSentMessageEchoServerConnectionStub clientSocket = new RespondsWithSentMessageEchoServerConnectionStub();
     EchoClient client = new EchoClient(
         clientSocket,
         new BufferedReader(new StringReader("input\nagain")),
@@ -33,9 +33,9 @@ class EchoClientTest {
   }
 
   @Test
-  void testConnectingToInvalidServer() {
+  void testOpenConnectionToInvalidServer() {
     StringWriter output = new StringWriter();
-    InvalidConnectionEchoClientSocketStub clientSocket = new InvalidConnectionEchoClientSocketStub();
+    InvalidConnectionEchoServerConnectionStub clientSocket = new InvalidConnectionEchoServerConnectionStub();
     EchoClient client = new EchoClient(
         clientSocket,
         new BufferedReader(new StringReader("input\n")),
@@ -49,7 +49,7 @@ class EchoClientTest {
   @Test
   void testProblemSendingMessages() {
     StringWriter output = new StringWriter();
-    ErrorSendingMessageEchoClientSocketStub clientSocket = new ErrorSendingMessageEchoClientSocketStub();
+    ErrorSendingMessageEchoServerConnectionStub clientSocket = new ErrorSendingMessageEchoServerConnectionStub();
     EchoClient client = new EchoClient(
         clientSocket,
         new BufferedReader(new StringReader("input\n")),
@@ -63,7 +63,7 @@ class EchoClientTest {
   @Test
   void testProblemReceivingResponses() {
     StringWriter output = new StringWriter();
-    ErrorReceivingResponseEchoClientSocketStub clientSocket = new ErrorReceivingResponseEchoClientSocketStub();
+    ErrorReceivingResponseEchoServerConnectionStub clientSocket = new ErrorReceivingResponseEchoServerConnectionStub();
     EchoClient client = new EchoClient(
         clientSocket,
         new BufferedReader(new StringReader("input\n")),
@@ -75,9 +75,9 @@ class EchoClientTest {
   }
 
   @Test
-  void testProblemDisconnectingFromServer() {
+  void testProblemClosingServerConnection() {
     StringWriter output = new StringWriter();
-    EchoClientSocket clientSocket = new ErrorDisconnectingEchoClientSocketStub();
+    ErrorClosingEchoServerConnectionStub clientSocket = new ErrorClosingEchoServerConnectionStub();
     EchoClient client = new EchoClient(
         clientSocket,
         new BufferedReader(new StringReader("input\n")),

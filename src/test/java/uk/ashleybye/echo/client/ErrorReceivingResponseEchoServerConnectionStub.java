@@ -1,9 +1,9 @@
 package uk.ashleybye.echo.client;
 
-public class ErrorReceivingResponseEchoClientSocketStub extends EchoClientSocket {
+public class ErrorReceivingResponseEchoServerConnectionStub extends EchoServerConnection {
 
   @Override
-  public void connect(String hostname, int port) {
+  public void open(String hostname, int port) {
     // Do nothing.
   }
 

@@ -3,19 +3,19 @@ package uk.ashleybye.echo.client;
 import java.io.IOException;
 import java.net.UnknownHostException;
 
-public class EchoClientSocket {
+public class EchoServerConnection {
 
   private final EchoClientSocketProvider socketProvider;
 
-  public EchoClientSocket() {
+  public EchoServerConnection() {
     this(new EchoClientSocketProvider());
   }
 
-  EchoClientSocket(EchoClientSocketProvider socketProvider) {
+  EchoServerConnection(EchoClientSocketProvider socketProvider) {
     this.socketProvider = socketProvider;
   }
 
-  public void connect(String hostname, int port) {
+  public void open(String hostname, int port) {
     try {
       socketProvider.openSocket(hostname, port);
     } catch (UnknownHostException ex) {
@@ -25,19 +25,19 @@ public class EchoClientSocket {
     }
   }
 
-  public void sendMessage(String message) { // TODO: println
-    socketProvider.getSocketWriter().write(message);
+  public void sendMessage(String message) {
+    socketProvider.write(message);
   }
 
   public String getResponse() {
     try {
-      return socketProvider.getSocketReader().readLine();
+      return socketProvider.read();
     } catch (IOException ex) {
       throw new ServerConnectionException();
     }
   }
 
-  public void disconnect() {
+  public void close() {
     try {
       socketProvider.closeSocket();
     } catch (IOException e) {

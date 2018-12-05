@@ -6,27 +6,27 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class EchoClientSocketProvider {
+class EchoClientSocketProvider {
 
   private Socket socket;
   private BufferedReader socketReader;
   private PrintWriter socketWriter;
 
-  public void openSocket(String hostname, int port) throws IOException {
+  void openSocket(String hostname, int port) throws IOException {
     socket = new Socket(hostname, port);
     socketReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     socketWriter = new PrintWriter(socket.getOutputStream());
   }
 
-  public PrintWriter getSocketWriter() {
-    return socketWriter;
+  void write(String message) {
+    socketWriter.println(message);
   }
 
-  public BufferedReader getSocketReader() {
-    return socketReader;
+  String read() throws IOException {
+    return socketReader.readLine();
   }
 
-  public void closeSocket() throws IOException {
+  void closeSocket() throws IOException {
     socketReader.close();
     socketWriter.close();
     socket.close();

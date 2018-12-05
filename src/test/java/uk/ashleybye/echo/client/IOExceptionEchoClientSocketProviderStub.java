@@ -10,6 +10,11 @@ public class IOExceptionEchoClientSocketProviderStub extends EchoClientSocketPro
   }
 
   @Override
+  public String read() throws IOException {
+    throw new IOException();
+  }
+
+  @Override
   public void closeSocket() throws IOException {
     throw new IOException();
   }

@@ -1,11 +1,11 @@
 package uk.ashleybye.echo.client;
 
-public class ErrorDisconnectingEchoClientSocketStub extends EchoClientSocket {
+public class ErrorClosingEchoServerConnectionStub extends EchoServerConnection {
 
   private String message;
 
   @Override
-  public void connect(String hostname, int port) {
+  public void open(String hostname, int port) {
     // Do nothing.
   }
 
@@ -20,7 +20,7 @@ public class ErrorDisconnectingEchoClientSocketStub extends EchoClientSocket {
   }
 
   @Override
-  public void disconnect() {
+  public void close() {
     throw new ServerConnectionException();
   }
 }

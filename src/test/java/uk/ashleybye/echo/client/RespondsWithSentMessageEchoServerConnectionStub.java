@@ -1,6 +1,6 @@
 package uk.ashleybye.echo.client;
 
-public class RespondsWithSentMessageEchoClientSocketStub extends EchoClientSocket {
+public class RespondsWithSentMessageEchoServerConnectionStub extends EchoServerConnection {
 
   private String hostname;
   private int port;
@@ -8,7 +8,7 @@ public class RespondsWithSentMessageEchoClientSocketStub extends EchoClientSocke
   private boolean disconnectWasCalled = false;
 
   @Override
-  public void connect(String hostname, int port) {
+  public void open(String hostname, int port) {
     this.hostname = hostname;
     this.port = port;
   }
@@ -24,7 +24,7 @@ public class RespondsWithSentMessageEchoClientSocketStub extends EchoClientSocke
   }
 
   @Override
-  public void disconnect() {
+  public void close() {
     disconnectWasCalled = true;
   }
 
