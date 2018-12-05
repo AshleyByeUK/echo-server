@@ -1,6 +1,6 @@
 package uk.ashleybye.echo.client;
 
-public class EchoClientSocketRespondsWithSentMessageStub extends EchoClientSocket {
+public class RespondsWithSentMessageEchoClientSocketStub extends EchoClientSocket {
 
   private String hostname;
   private int port;
@@ -30,10 +30,6 @@ public class EchoClientSocketRespondsWithSentMessageStub extends EchoClientSocke
 
   boolean connectCalledWith(String hostname, int port) {
     return this.hostname == hostname && this.port == port;
-  }
-
-  String getSentMessage() {
-    return message;
   }
 
   public boolean disconnectWasCalled() {

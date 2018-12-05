@@ -1,23 +1,23 @@
 package uk.ashleybye.echo.client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class EchoClientSocket {
 
-  private Socket socket;
-  private BufferedReader socketReader;
-  private PrintWriter socketWriter;
+  private final EchoClientSocketProvider socketProvider;
+
+  public EchoClientSocket() {
+    this(new EchoClientSocketProvider());
+  }
+
+  EchoClientSocket(EchoClientSocketProvider socketProvider) {
+    this.socketProvider = socketProvider;
+  }
 
   public void connect(String hostname, int port) {
     try {
-      socket = new Socket(hostname, port);
-      socketWriter = new PrintWriter(socket.getOutputStream());
-      socketReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      socketProvider.openSocket(hostname, port);
     } catch (UnknownHostException ex) {
       throw new InvalidConnectionParametersException();
     } catch (IOException ex) {
@@ -25,13 +25,13 @@ public class EchoClientSocket {
     }
   }
 
-  public void sendMessage(String message) {
-    socketWriter.write(message);
+  public void sendMessage(String message) { // TODO: println
+    socketProvider.getSocketWriter().write(message);
   }
 
   public String getResponse() {
     try {
-      return socketReader.readLine();
+      return socketProvider.getSocketReader().readLine();
     } catch (IOException ex) {
       throw new ServerConnectionException();
     }
@@ -39,9 +39,7 @@ public class EchoClientSocket {
 
   public void disconnect() {
     try {
-      socketReader.close();
-      socketWriter.close();
-      socket.close();
+      socketProvider.closeSocket();
     } catch (IOException e) {
       throw new ServerConnectionException();
     }
