@@ -22,7 +22,7 @@ public class EchoClient {
         new PrintWriter(System.out, true));
   }
 
-  EchoClient(EchoServerConnection serverConnection, BufferedReader input, PrintWriter output) {
+  public EchoClient(EchoServerConnection serverConnection, BufferedReader input, PrintWriter output) {
     this.serverConnection = serverConnection;
     this.input = input;
     this.output = output;
