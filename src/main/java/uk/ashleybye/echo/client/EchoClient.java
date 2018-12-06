@@ -12,7 +12,7 @@ public class EchoClient {
   private final PrintWriter output;
 
   public EchoClient() {
-    this(new EchoServerConnection(), new BufferedReader(new InputStreamReader(System.in)), new PrintWriter(System.out));
+    this(new EchoServerConnection(), new BufferedReader(new InputStreamReader(System.in)), new PrintWriter(System.out, true));
   }
 
   EchoClient(EchoServerConnection serverConnection, BufferedReader input, PrintWriter output) {
@@ -44,7 +44,8 @@ public class EchoClient {
 
   private void sendAndReceiveUserInputLine(String userInput) {
     serverConnection.sendMessage(userInput);
-    output.println(serverConnection.getResponse());
+    String response = serverConnection.getResponse();
+    output.println(response);
   }
 
   private void exitWithMessage(String message) {

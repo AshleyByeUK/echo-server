@@ -15,7 +15,7 @@ class EchoClientSocketProvider {
   void openSocket(String hostname, int port) throws IOException {
     socket = new Socket(hostname, port);
     socketReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-    socketWriter = new PrintWriter(socket.getOutputStream());
+    socketWriter = new PrintWriter(socket.getOutputStream(), true);
   }
 
   void write(String message) {
