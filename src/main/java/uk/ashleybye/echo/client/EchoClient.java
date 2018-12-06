@@ -11,8 +11,15 @@ public class EchoClient {
   private final BufferedReader input;
   private final PrintWriter output;
 
+  public static void main(String[] args) {
+    EchoClient client = new EchoClient();
+    client.start("127.0.0.1", 9999);
+  }
+
   public EchoClient() {
-    this(new EchoServerConnection(), new BufferedReader(new InputStreamReader(System.in)), new PrintWriter(System.out, true));
+    this(new EchoServerConnection(),
+        new BufferedReader(new InputStreamReader(System.in)),
+        new PrintWriter(System.out, true));
   }
 
   EchoClient(EchoServerConnection serverConnection, BufferedReader input, PrintWriter output) {
@@ -30,7 +37,7 @@ public class EchoClient {
       exitWithMessage("An error occurred reading user input");
     } catch (InvalidConnectionParametersException ex) {
       exitWithMessage("Invalid connection parameters specified");
-    } catch (ServerConnectionException ex) {
+    } catch (ClientConnectionException ex) {
       exitWithMessage("An error occurred communicating with the server");
     }
   }

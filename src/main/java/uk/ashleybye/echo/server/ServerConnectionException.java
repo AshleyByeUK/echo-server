@@ -1,4 +1,4 @@
-package uk.ashleybye.echo.client;
+package uk.ashleybye.echo.server;
 
 public class ServerConnectionException extends RuntimeException {
 

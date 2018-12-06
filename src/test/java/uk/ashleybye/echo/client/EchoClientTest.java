@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import org.junit.jupiter.api.Test;
@@ -19,25 +21,25 @@ class EchoClientTest {
   @Test
   void testOpenConnectionSendsAndReceivesMultipleMessagesCloseConnection() {
     StringWriter output = new StringWriter();
-    RespondsWithSentMessageEchoServerConnectionStub clientSocket = new RespondsWithSentMessageEchoServerConnectionStub();
+    RespondsWithSentMessageEchoServerConnectionStub serverConnection = new RespondsWithSentMessageEchoServerConnectionStub();
     EchoClient client = new EchoClient(
-        clientSocket,
+        serverConnection,
         new BufferedReader(new StringReader("input\nagain")),
         new PrintWriter(output));
 
     client.start(VALID_HOSTNAME, VALID_PORT);
 
-    assertTrue(clientSocket.connectCalledWith("hostname", 1234));
+    assertTrue(serverConnection.connectCalledWith("hostname", 1234));
     assertEquals("input\nagain\n", output.toString());
-    assertTrue(clientSocket.disconnectWasCalled());
+    assertTrue(serverConnection.disconnectWasCalled());
   }
 
   @Test
   void testOpenConnectionToInvalidServer() {
     StringWriter output = new StringWriter();
-    InvalidConnectionEchoServerConnectionStub clientSocket = new InvalidConnectionEchoServerConnectionStub();
+    InvalidConnectionEchoServerConnectionStub serverConnection = new InvalidConnectionEchoServerConnectionStub();
     EchoClient client = new EchoClient(
-        clientSocket,
+        serverConnection,
         new BufferedReader(new StringReader("input\n")),
         new PrintWriter(output));
 
@@ -49,9 +51,9 @@ class EchoClientTest {
   @Test
   void testProblemSendingMessages() {
     StringWriter output = new StringWriter();
-    ErrorSendingMessageEchoServerConnectionStub clientSocket = new ErrorSendingMessageEchoServerConnectionStub();
+    ErrorSendingMessageEchoServerConnectionStub serverConnection = new ErrorSendingMessageEchoServerConnectionStub();
     EchoClient client = new EchoClient(
-        clientSocket,
+        serverConnection,
         new BufferedReader(new StringReader("input\n")),
         new PrintWriter(output));
 
@@ -63,9 +65,9 @@ class EchoClientTest {
   @Test
   void testProblemReceivingResponses() {
     StringWriter output = new StringWriter();
-    ErrorReceivingResponseEchoServerConnectionStub clientSocket = new ErrorReceivingResponseEchoServerConnectionStub();
+    ErrorReceivingResponseEchoServerConnectionStub serverConnection = new ErrorReceivingResponseEchoServerConnectionStub();
     EchoClient client = new EchoClient(
-        clientSocket,
+        serverConnection,
         new BufferedReader(new StringReader("input\n")),
         new PrintWriter(output));
 
@@ -77,14 +79,31 @@ class EchoClientTest {
   @Test
   void testProblemClosingServerConnection() {
     StringWriter output = new StringWriter();
-    ErrorClosingEchoServerConnectionStub clientSocket = new ErrorClosingEchoServerConnectionStub();
+    ErrorClosingEchoServerConnectionStub serverConnection = new ErrorClosingEchoServerConnectionStub();
     EchoClient client = new EchoClient(
-        clientSocket,
+        serverConnection,
         new BufferedReader(new StringReader("input\n")),
         new PrintWriter(output));
 
     client.start(VALID_HOSTNAME, VALID_PORT);
 
     assertEquals("input\nAn error occurred communicating with the server\n", output.toString());
+  }
+
+  @Test
+  void testErrorReadingUserInput() throws IOException {
+    StringWriter output = new StringWriter();
+    BufferedReader input = new BufferedReader(Reader.nullReader());
+    input.close(); // Will cause input to throw IOException when called.
+
+    RespondsWithSentMessageEchoServerConnectionStub serverConnection = new RespondsWithSentMessageEchoServerConnectionStub();
+    EchoClient client = new EchoClient(
+        serverConnection,
+        input,
+        new PrintWriter(output));
+
+    client.start(VALID_HOSTNAME, VALID_PORT);
+
+    assertEquals("An error occurred reading user input\n", output.toString());
   }
 }

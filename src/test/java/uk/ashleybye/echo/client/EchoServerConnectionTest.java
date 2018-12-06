@@ -68,7 +68,7 @@ class EchoServerConnectionTest {
 
     EchoServerConnection serverConnection = new EchoServerConnection(socketProvider);
 
-    assertThrows(ServerConnectionException.class, () -> serverConnection.open(VALID_HOSTNAME, VALID_PORT));
+    assertThrows(ClientConnectionException.class, () -> serverConnection.open(VALID_HOSTNAME, VALID_PORT));
   }
 
   @Test
@@ -77,7 +77,7 @@ class EchoServerConnectionTest {
 
     EchoServerConnection serverConnection = new EchoServerConnection(socketProvider);
 
-    assertThrows(ServerConnectionException.class, () -> serverConnection.getResponse());
+    assertThrows(ClientConnectionException.class, () -> serverConnection.getResponse());
   }
 
   @Test
@@ -86,6 +86,6 @@ class EchoServerConnectionTest {
 
     EchoServerConnection serverConnection = new EchoServerConnection(socketProvider);
 
-    assertThrows(ServerConnectionException.class, () -> serverConnection.close());
+    assertThrows(ClientConnectionException.class, () -> serverConnection.close());
   }
 }

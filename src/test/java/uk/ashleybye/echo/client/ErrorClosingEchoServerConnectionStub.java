@@ -21,6 +21,6 @@ public class ErrorClosingEchoServerConnectionStub extends EchoServerConnection {
 
   @Override
   public void close() {
-    throw new ServerConnectionException();
+    throw new ClientConnectionException();
   }
 }

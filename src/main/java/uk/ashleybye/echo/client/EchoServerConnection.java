@@ -21,7 +21,7 @@ public class EchoServerConnection {
     } catch (UnknownHostException ex) {
       throw new InvalidConnectionParametersException();
     } catch (IOException ex) {
-      throw new ServerConnectionException();
+      throw new ClientConnectionException();
     }
   }
 
@@ -33,7 +33,7 @@ public class EchoServerConnection {
     try {
       return socketProvider.read();
     } catch (IOException ex) {
-      throw new ServerConnectionException();
+      throw new ClientConnectionException();
     }
   }
 
@@ -41,7 +41,7 @@ public class EchoServerConnection {
     try {
       socketProvider.closeSocket();
     } catch (IOException e) {
-      throw new ServerConnectionException();
+      throw new ClientConnectionException();
     }
   }
 }

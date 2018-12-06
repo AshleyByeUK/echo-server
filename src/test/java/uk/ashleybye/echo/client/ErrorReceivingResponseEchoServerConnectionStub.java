@@ -14,6 +14,6 @@ public class ErrorReceivingResponseEchoServerConnectionStub extends EchoServerCo
 
   @Override
   public String getResponse() {
-    throw new ServerConnectionException();
+    throw new ClientConnectionException();
   }
 }

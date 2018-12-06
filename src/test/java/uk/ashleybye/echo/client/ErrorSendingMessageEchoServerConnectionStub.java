@@ -9,6 +9,6 @@ public class ErrorSendingMessageEchoServerConnectionStub extends EchoServerConne
 
   @Override
   public void sendMessage(String message) {
-    throw new ServerConnectionException();
+    throw new ClientConnectionException();
   }
 }
