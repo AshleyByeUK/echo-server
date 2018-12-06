@@ -17,10 +17,11 @@ public class IntegrationTest {
   private static final int PORT = 9999;
 
   @Test
-  void testClientAndServerCanCommunicateOverRealSocket() {
+  void testClientAndServerCanCommunicateOverRealSocket() throws InterruptedException {
     StringWriter output = new StringWriter();
 
     startEchoServer();
+    Thread.sleep(2000);
     startEchoClient(output);
 
 
